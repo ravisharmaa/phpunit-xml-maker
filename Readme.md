@@ -3,7 +3,7 @@ comes in the way. Honestly got fed up with searching ```phpunit.xml``` in on oth
 This makes it easy to create the xml file in just one command.
 
 
-```php console make:xml```
+```php please make:xml```
 
 makes the xml file which helps you to go forwards with writing your tests.
 
