@@ -1,0 +1,19 @@
+{
+    "name": "ravibastola/phpunit-xml-maker",
+    "authors": [
+        {
+            "name": "ravisharmaa",
+            "email": "bastola.ravi@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/console": "^5.0",
+        "phpunit/phpunit": "^8.4",
+        "ext-xmlwriter": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\" : "src/"
+        }
+    }
+}
