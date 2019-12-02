@@ -12,11 +12,13 @@ use Symfony\Component\Console\Question\Question;
 class XmlMakerCommand extends Command
 {
     protected array $defaults = [
+        'bootstrap' => 'vendor/autoload.php',
         'processIsolation' => 'true',
         'backupGlobals' => 'true',
         'verbose' => 'true',
         'stopOnFaliure' => 'false',
         'colors' => 'true',
+        'testsuiteName' => 'Application test Suite',
     ];
 
     protected function configure()
@@ -33,16 +35,28 @@ class XmlMakerCommand extends Command
         $xmlWriter->openMemory();
 
         $xmlWriter->startDocument('1.0', 'UTF-8');
+        $xmlWriter->setIndent(true);
 
         $xmlWriter->startElement('phpunit');
 
-        $proceedWithDefaults = $this->askQuestion($output->writeln('<info>Should I opt with defaults?</info>'), 'true', $input, $output);
 
-        if ('true' === $proceedWithDefaults) {
-            foreach ($this->defaults as $option => $answer) {
-                $xmlWriter->writeAttribute($option, $answer);
-            }
-        }
+//        $proceedWithDefaults = $this->askQuestion('Should I opt in with the defaults? ', 'true', $input, $output);
+//
+//        if ('true' === $proceedWithDefaults) {
+//            foreach ($this->defaults as $option => $answer) {
+//                $xmlWriter->writeAttribute($option, $answer);
+//
+//                if ('testsuiteName' === $option) {
+//                    $xmlWriter->setIndent(true);
+//                    $xmlWriter->startElement('testsuites');
+//                    $xmlWriter->startElement('testsuite');
+//                    $xmlWriter->writeElement('name', $answer);
+//                    $xmlWriter->writeElement('directory','tests');
+//                    $xmlWriter->endElement();
+//                    $xmlWriter->endElement();
+//                }
+//            }
+//        }
 
         $xmlWriter->writeAttribute('processIsolation',
             $this->askQuestion('Should process isolation be enabled? ', 'true', $input, $output));
@@ -57,19 +71,27 @@ class XmlMakerCommand extends Command
 
         $xmlWriter->writeAttribute('verbose', 'true');
 
+        $xmlWriter->startElement('testsuites');
+        $xmlWriter->startElement('testsuite');
+        $xmlWriter->writeElement('directory','tests');
+        $xmlWriter->writeAttribute('suffix', 'Test.php');
+        $xmlWriter->endElement();
+        $xmlWriter->endElement();
+        $xmlWriter->endElement();
         $xmlWriter->endElement();
 
-        $xmlWriter->endDocument();
+        $xmlWriter->endElement();
 
         $xmlContent = $xmlWriter->flush();
 
         $fileHandle = fopen('phpunit.xml', 'w');
 
         fwrite($fileHandle, $xmlContent);
+        die();
 
         fclose($fileHandle);
 
-        return $output->writeln('xml created successfully');
+        return true;
     }
 
     public function askQuestion(string $question, string $defaultAnswer, InputInterface $input, OutputInterface $output): string

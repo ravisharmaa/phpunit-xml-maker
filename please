@@ -13,6 +13,8 @@ $application->add(new XmlMakerCommand());
 
 $application->run();
 
+$application->setCatchExceptions(false);
+
 
 
 
