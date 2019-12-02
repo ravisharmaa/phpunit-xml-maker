@@ -36,7 +36,7 @@ class XmlMakerCommand extends Command
 
         $xmlWriter->startElement('phpunit');
 
-        $proceedWithDefaults = $this->askQuestion($output->writeln('<info>foo</info>'), 'true', $input, $output);
+        $proceedWithDefaults = $this->askQuestion($output->writeln('<info>Should I opt with defaults?</info>'), 'true', $input, $output);
 
         if ('true' === $proceedWithDefaults) {
             foreach ($this->defaults as $option => $answer) {
